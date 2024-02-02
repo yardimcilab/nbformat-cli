@@ -1,5 +1,6 @@
 import click
 import nbformat
+import sys
 from nbformat.v4 import new_notebook, new_code_cell, new_markdown_cell
 
 @click.group()
@@ -20,12 +21,12 @@ def cell():
 @cell.command()
 @click.argument('notebook_path')
 @click.argument('anchor_index', type=int)
-@click.argument('content')
 @click.option('--distance', default=0, help="Distance from [anchor_index] of added cell")
 @click.option('--cell_type', default='code', help="Type of cell to add")
-def add(notebook_path, anchor_index, content, distance, cell_type):
+def add(notebook_path, anchor_index, distance, cell_type):
     """Add a new cell to a notebook."""
     try:
+        content = sys.stdin.read()
         location = anchor_index + distance
         with open(notebook_path, 'r') as f:
             nb = nbformat.read(f, as_version=4)
